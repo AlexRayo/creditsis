@@ -33,17 +33,17 @@
         </div>
         <div class="col-md-2">
             <select name="cuentas" class="form-control" required>
-                @if ($cuentas === 'Pendientes')
-                    <option selected>Pendientes</option>
-                    <option>Pagos</option>
+                @if ($cuentas === 'Pagos')
+                    <option selected>Pagos</option>
+                    <option>Pendientes</option>
                     <!--<option>Ambos</option>-->
                 <!--elseif ($cuentas === 'Ambos')
                     <option selected>Ambos</option>
                     <option>Pagos</option>
                     <option>Pendientes</option>-->
                 @else 
-                    <option selected>Pagos</option>
-                    <option>Pendientes</option>
+                    <option selected>Pendientes</option>
+                    <option>Pagos</option>
                     <!--<option>Ambos</option>-->
                 @endif          
             </select>
@@ -262,9 +262,8 @@
                         
                         @elseif($cuentas === "Pendientes")
                     
-                        @foreach ($pagosypendientes as $cuenta)                                                    
-                            @if (App\Prestamo::find($cuenta->id)->abonos()->where('prestamo_id', $cuenta->id)->exists())                                
-                            @elseif ($cuenta->cliente->zona === "$zona")                        
+                        @foreach ($pagosypendientes as $cuenta)                                                                                   
+                            @if ($cuenta->cliente->zona === "$zona")                        
                                 <tr>
                                     <td>{{ $cuenta->cliente->nombres }}</td>
                                     <td>{{ (int) $cuenta->interes}} %</td>

@@ -6,6 +6,7 @@
         <h2><b>{{$showCliente->nombres}}</b></h2>        
         <p>Zona: <b>{{$showCliente->zona}}</b></p> <p>Dirección: <b>{{$showCliente->direccion}}</b></p>
         <p>Teléfono: <b>{{$showCliente->telefono}}</b></p>
+        <p>Observaciones: <b>{{$showCliente->notas}}</b></p>
         <br>          
     </div>
     
