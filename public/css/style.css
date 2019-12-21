@@ -2,7 +2,7 @@
     font-family: 'Ubuntu';
 }
 .box-shadow {
-    padding: 25px; 
+    /*padding: 25px; */
     box-shadow: 5px 5px 5px rgba(0,0,0,0.15);
 }
 textarea:focus, input:focus, input { 
@@ -23,9 +23,8 @@ textarea:focus, input:focus, input {
     text-align: center;
 }
 .bg-gray {
-    background: #f1f1f1 !important;
+    background: #f0f9ff !important;
     border-radius: 5px;
-    color: #777777 !important;
     padding: 10px 10px;
     text-align: center;
 }

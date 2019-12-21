@@ -58,7 +58,7 @@
 
 <!--***********************************-->
 
-<span class="col-md-12 bg-gray" style="width: auto; text-align: left">
+<div class="bg-gray" style="width: auto; text-align: left">
         @if ($cuentas != NULL && $diffInMonths > 0)
             {{'Resultado de '.$diffInMonths. ' meses / o '. $diffInDays. ' días'}}<br>
         @elseif ($cuentas != NULL && $diffInMonths === 0)
@@ -72,8 +72,8 @@
             Cuotas: <b class="totalCuotas"></b><br>
             Abonos: <b class="totalAbonos"></b>        
         @endif   
-</span>
-<div class="panel panel-default col-md-12 box-shadow" style="margin-bottom: 75px">
+</div>
+<div class="box-shadow" style="margin-bottom: 75px">
     <div class="panel-heading bg-blue">
     @if ($cuentas === "Pagos")
         <h3 align=""><b>Pagos</b> hechos de cuotas</h3>
@@ -81,8 +81,8 @@
         <h3 align=""><b>Pendientes</b> de cuotas por cobrar</h3>
     @endif
     </div>
-    <div class="panel-body">
-        <div class="col-md-12 table-responsive">
+    <div class="">
+        <div class="table-responsive">
             <table class="table table-hover table-bordered table-striped" id="tablaCuotas">
                 <thead>
                     <tr>
@@ -92,11 +92,13 @@
                     @if ($cuentas === 'Pagos' || $cuentas === 'Pagos')
                         <th>Cuota</th>
                     @else
-                        <th width="130px">Deuda en cuotas</th>
+                        <th width="75px">Cuota</th>
                     @endif                    
-                    <th width="100px">Día de pago</th>
-                    <th width="150px">Fecha de entrega</th>
-                    <th width="50px">Zona</th>
+                    <th width="50px">Día pago</th>
+                    <th width="75px">Fecha de entrega</th>
+                    <th width="50px">Días de retraso</th>
+                    <th width="75px">Adicional por retraso</th>
+                    <th width="75px">TOTAL por retraso</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -158,7 +160,22 @@
                                 </td>
                                 <td>{{$cuenta->dia_pago}}</td>
                                 <td>{{ \Carbon\Carbon::parse($cuenta->fecha_entrega)->format('d/m/Y')}}</td>
-                                <td>{{$cuenta->cliente->zona}}</td>
+                                <td>
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6)<!--Si hay mas de 6 días de retraso-->
+                                        {{(\Carbon\Carbon::now()->day - $cuenta->dia_pago)}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6)
+                                    <!--Divide el valor de la cuota de interes mensual entre los 30 días del mes multiplicado por los días de retraso-->
+                                    {{(($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago)}}
+                                    @endif
+                                </td>
+                                <td>
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6) 
+                                    {{(($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago) + $cuenta->valor_cuota}}
+                                    @endif
+                                </td>
                             </tr>
                         @elseif ($zona === "AMBAS")      
                             <tr>
@@ -207,7 +224,7 @@
     </div>    
 </div>
 
-<div class="panel panel-default col-md-12 box-shadow">
+<div class="panel panel-default box-shadow">
         <div class="panel-heading bg-blue">
             @if ($cuentas === 'Pagos')
                 <h3 align="">Abonos al capital</h3></div>
@@ -216,7 +233,7 @@
             @endif
             
         <div class="panel-body">
-            <div class="col-md-12 table-responsive">
+            <div class="table-responsive">
                 <table class="table table-hover table-bordered table-striped" id="tablaAbonos">
                     <thead>
                         <tr>
