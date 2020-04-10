@@ -86,19 +86,20 @@
             <table class="table table-hover table-bordered table-striped" id="tablaCuotas">
                 <thead>
                     <tr>
-                    <th>Cliente</th>
-                    <th width="85px">% Interes</th>
-                    <th width="140px">Capital solicitado</th>
+                    <th class="">Cliente</th>
+                    <th width="75px">% Interes</th>
+                    <th width="75px">Capital solicitado</th>
                     @if ($cuentas === 'Pagos' || $cuentas === 'Pagos')
                         <th>Cuota</th>
                     @else
                         <th width="75px">Cuota</th>
-                    @endif                    
+                    @endif
+                    <th width="75px">Saldo</th>              
                     <th width="50px">Día pago</th>
                     <th width="75px">Fecha de entrega</th>
-                    <th width="50px">Días de retraso</th>
-                    <th width="75px">Adicional por retraso</th>
-                    <th width="75px">TOTAL por retraso</th>
+                    <th width="75px">Días de retraso</th>
+                    <th width="100px">Adicional por retraso</th>
+                    <th width="100px">TOTAL por retraso</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -146,7 +147,7 @@
                     
                     @foreach ($pagosypendientes as $cuenta)                                                    
                         @if (App\Prestamo::find($cuenta->id)->cuotas()->where('prestamo_id', $cuenta->id)->exists())                                
-                        @elseif ($cuenta->cliente->zona === "$zona")                        
+                        @elseif ($cuenta->cliente->zona === "$zona" && $cuenta->saldo > 0)                    
                             <tr>
                                 <td>{{ $cuenta->cliente->nombres }}</td>
                                 <td>{{ (int) $cuenta->interes}} %</td>
@@ -158,22 +159,27 @@
                                         {{ $cuenta->valor_cuota}}
                                     @endif
                                 </td>
+                                <td>{{ $cuenta->saldo }}</td>
                                 <td>{{$cuenta->dia_pago}}</td>
                                 <td>{{ \Carbon\Carbon::parse($cuenta->fecha_entrega)->format('d/m/Y')}}</td>
                                 <td>
-                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6)<!--Si hay mas de 6 días de retraso-->
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 4)<!--Si hay mas de 4 días de retraso-->
                                         {{(\Carbon\Carbon::now()->day - $cuenta->dia_pago)}}
                                     @endif
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6)
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 4)
                                     <!--Divide el valor de la cuota de interes mensual entre los 30 días del mes multiplicado por los días de retraso-->
-                                    {{(($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago)}}
+                                    {{ number_format( (($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago), 2, '.', ',') }}
+                                    <!-- number_format permite redondear flotantes a los decimales que se desee, 
+                                        en este caso se ha utilizado algo como:
+                                        number_format($number, 2, '.', ',');
+                                        2 = decimal places |  '.' = decimal seperator | ',' = thousand seperator-->
                                     @endif
                                 </td>
                                 <td>
-                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 6) 
-                                    {{(($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago) + $cuenta->valor_cuota}}
+                                    @if (\Carbon\Carbon::now()->day - $cuenta->dia_pago > 4) 
+                                    {{ number_format((($cuenta->valor_cuota)/30) * (\Carbon\Carbon::now()->day - $cuenta->dia_pago) + $cuenta->valor_cuota, 2, '.', ',')}}
                                     @endif
                                 </td>
                             </tr>

@@ -145,6 +145,8 @@ class PrestamoController extends Controller
         $cuentas = $request->get('cuentas');#solo para recibir y regresar el request
         $minDatePD = Carbon\Carbon::parse($minDate)->day;
         $maxDatePD = Carbon\Carbon::parse($maxDate)->day;
+        $maxDateDaysInMonth = Carbon\Carbon::parse($maxDate)->daysInMonth;#Determina la cantidad de días q tiene el mes de cierre
+        $maxDateMonth = Carbon\Carbon::parse($maxDate)->month;
 
         $pagosypendientes = Prestamo::select("prestamos.*")
         ->whereBetween('dia_pago', ["$minDatePD", "$maxDatePD"])#Es necesario agregarle la hora del final del día de la última fecha, puesto que la db contiene hora ("datetime" y no solo "date"); la fecha de inicio no lo requiere porq por defecto toma 00:00:00
@@ -158,6 +160,19 @@ class PrestamoController extends Controller
         ->whereBetween('fecha_abono', ["$minDate", "$maxDate".' 23:59:59'])
         ->get(); 
     
-        return view('prestamos.pagos', compact('diffInDays','diffInMonths','pagosypendientes','minDate','maxDate','zona','cuentas','cuotasPagas','abonosPagos'));     
+        return view('prestamos.pagos', compact(
+            'diffInDays',
+            'diffInMonths',
+            'pagosypendientes',
+            'minDate',
+            'maxDate',
+            'maxDatePD',
+            'zona',
+            'cuentas',
+            'cuotasPagas',
+            'abonosPagos', 
+            'maxDateDaysInMonth',
+            'maxDateMonth'
+        ));     
     }  
 }

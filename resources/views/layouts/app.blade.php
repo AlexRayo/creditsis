@@ -12,12 +12,7 @@
      @yield('styles')
     <!-- Fonts -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">
-
-    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-
-    <script src="{{asset('my_vendor/js/main.js')}}"></script>    
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:400,700" rel="stylesheet">    
     
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
@@ -36,4 +31,7 @@
     body {background: white !important;}
     form {margin:50px 10px;}
 </style>
+<script src="{{asset('my_vendor/js/main.js')}}"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 </html>

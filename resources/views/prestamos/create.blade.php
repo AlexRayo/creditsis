@@ -31,7 +31,7 @@
                 <div class="form-group">
                     <label class="col-md-6 control-label">Día de pago</label>
                     <div class="col-md-5">
-                        <input type="number" name="dia_pago" class="form-control input-md" required min="01" max="31"/>
+                        <input type="number" name="dia_pago" class="form-control input-md" required min="01" max="28"/>
                     </div>
                 </div> 
                 <input type="hidden" id="nuevoSaldo" class="form-control" required readonly><br>
